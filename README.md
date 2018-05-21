@@ -17,10 +17,11 @@ And add `extend-history` to `plugins` in `.zshrc`.
 
 ```Zsh
 # file to write history
-export ZSH_EXTEND_HISTORY_FILE="/tmp/my-gi.history"
+export ZSH_EXTEND_HISTORY_FILE="/tmp/my-zsh.history"
 ```
 
 
 ### Ideas
 
 - Detect git repository and extract info and project
+- Deduplicate
