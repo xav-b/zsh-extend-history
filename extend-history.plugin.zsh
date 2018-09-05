@@ -2,15 +2,23 @@
 # NOTE is ";" a good idea?
 
 # defaul configuration (can be overwritten)
-export EXTENDED_HISTORY_FILE="$HOME/.zsh_extended_history"
+export ZSH_EXTEND_HISTORY_DEFAULT_FILE="$HOME/.zsh_extended_history"
+export ZSH_EXTEND_HISTORY_FILE="$ZSH_EXTEND_HISTORY_DEFAULT_FILE"
+
+_check_mode() {
+  [ -n "$ZSH_EXTEND_HISTORY_DEBUG" ] && echo "[WARN] debug mode activated on zsh history plugin"
+  [ -n "$ZSH_EXTEND_HISTORY_DEBUG" ] && ZSH_EXTEND_HISTORY_FILE="/dev/stdout"
+  # otherwise set it back to history file
+  [ -z "$ZSH_EXTEND_HISTORY_DEBUG" ] &&  ZSH_EXTEND_HISTORY_FILE="${ZSH_EXTEND_HISTORY_FILE:-$ZSH_EXTEND_HISTORY_DEFAULT_FILE}"
+}
 
 _record() {
-  printf "$@" >> ${EXTENDED_HISTORY_FILE}
+  _check_mode
+  printf "$@" >> ${ZSH_EXTEND_HISTORY_FILE}
 }
 
 _record_project_info() {
-  git status &> /dev/null
-  if [[ "$?" -eq 0 ]]; then
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == true ]]; then
     _record "git_branch=$(git rev-parse --abbrev-ref HEAD);git_commit=$(git rev-parse --short HEAD);git_project=$(basename $(git rev-parse --show-toplevel));"
   fi
 
@@ -21,7 +29,6 @@ _record_project_info() {
 }
 
 _record_terminal_info() {
-  # TODO tmux? ($TMUX $TMUX_PANE)
   _record "tty=$(tty);term=${TERM};shell=${SHELL};tmux=${TMUX};"
 }
 

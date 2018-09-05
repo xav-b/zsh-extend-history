@@ -3,7 +3,7 @@
 ### Install
 
 - Antigen: `antigen bundle xav-b/zsh-extend-history`
-- ZPlug: `zplug "popstas/zsh-command-time"`
+- ZPlug: `zplug "xav-b/zsh-extend-history"`
 - oh-my-zsh:
 
 ```Shell
@@ -17,11 +17,23 @@ And add `extend-history` to `plugins` in `.zshrc`.
 
 ```Zsh
 # file to write history
+# default to `$HOME/.zsh_extended_history`
 export ZSH_EXTEND_HISTORY_FILE="/tmp/my-zsh.history"
+
+# print history collected on stdout instead of file
+export ZSH_EXTEND_HISTORY_DEBUG="true"
 ```
+
+
+### Development
+
+Just source the file everytime you test changes =)
 
 
 ### Ideas
 
-- Detect git repository and extract info and project
+- option to ignore "boring commands" (ls, cd, ...)
+- command to nicely display in the terminal? (or put that in gi)
+- session id
 - Deduplicate
+- Only search/display history per directory/git project
