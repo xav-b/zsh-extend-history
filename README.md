@@ -29,8 +29,18 @@ export ZSH_EXTEND_HISTORY_DEBUG="true"
 
 Just source the file everytime you test changes =)
 
+Something like that can help: `tail -f $ZSH_EXTEND_HISTORY_FILE | ./stream.py`
 
-### Ideas
+
+### Ideas/Notes
+
+- vim and other long-lasting commands is an issue for the start and end
+  hooks (other commands will probably happen in the meantime). We should
+  instead compute a unique id that the `end` can refer too, and use it
+  to retrieve the start stored in a temporary place (/tmp/gi/{this-id}.cmd).
+
+- the `end` command sometimes appear on a seperate line (most probably
+  related)
 
 - option to ignore "boring commands" (ls, cd, ...)
 - command to nicely display in the terminal? (or put that in gi)
