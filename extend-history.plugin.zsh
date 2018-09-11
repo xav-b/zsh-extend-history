@@ -1,6 +1,7 @@
+# Leverage zsh hooks to enhance history recording
 # http://zsh.sourceforge.net/Doc/Release/Functions.html
-# NOTE is ";" a good idea?
-# FIXME entering just <Enter> will have only precmd_functions executed
+
+# TODO use `locale`
 
 # defaul configuration (can be overwritten)
 export ZSH_EXTEND_HISTORY_DEFAULT_FILE="$HOME/.zsh_extended_history"
@@ -28,12 +29,13 @@ _commit() {
 
 _record_project_info() {
   if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == true ]]; then
-    _record "git_branch=$(git rev-parse --abbrev-ref HEAD);git_commit=$(git rev-parse --short HEAD);git_project=$(basename $(git rev-parse --show-toplevel))"
+    _record "git_branch=$(git rev-parse --abbrev-ref HEAD);git_commit=$(git rev-parse --short HEAD);git_project=$(basename -s .git `git config --get remote.origin.url`)"
   fi
 
   # TODO support other language than Python
   if [[ -n "${VIRTUAL_ENV}" ]]; then
-    _record "venv=${VIRTUAL_ENV};runtime=$(python --version)"
+		# cf https://stackoverflow.com/questions/23862569/unable-to-store-python-version-to-a-shell-variable
+    _record "venv=$(basename ${VIRTUAL_ENV});runtime=$(python --version 2>&1)"
   fi
 }
 
@@ -43,7 +45,7 @@ _record_terminal_info() {
 
 _command_history_preexec() {
   # NOTE should it be global?
-  _record "startts=$(date +%s);user_cmd=$1;real_cmd=$2;user=$USER;host=$(hostname);pwd=$PWD"
+  _record "uuid=$(uuidgen | tr '[:upper:]' '[:lower:]');startts=$(date +%s);user_cmd=$1;real_cmd=$2;user=$USER;host=$(hostname);pwd=$PWD"
 
   _record_terminal_info
 
