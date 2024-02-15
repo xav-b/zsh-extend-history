@@ -29,7 +29,7 @@ _commit() {
 
 _record_project_info() {
   if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == true ]]; then
-    _record "git_branch=$(git rev-parse --abbrev-ref HEAD);git_commit=$(git rev-parse --short HEAD);git_project=$(basename -s .git `git config --get remote.origin.url`)"
+    _record "git_branch=$(git rev-parse --abbrev-ref HEAD);git_commit=$(git rev-parse --short HEAD);git_project=$(basename -s .git "$(git config --get remote.origin.url)")"
   fi
 
   # TODO support other language than Python
